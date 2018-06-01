@@ -90,12 +90,8 @@
                 arr = JSON.parse(s)
                 const historyDiv = getHistoryDiv()
                 historyDiv.innerHTML = ''
-                let i = 1
                 arr.forEach(item => {
-                    setTimeout(() => {
-                        createHistoryItem(historyDiv, item)
-                    }, (200 + 100 * i))
-                    i++
+                    createHistoryItem(historyDiv, item)
                 })
             }
         }
@@ -119,11 +115,11 @@
         function randomBounceIn() {
             const r = Math.floor((Math.random() * 3) + 1)
             if (r == 1) {
-                return "fadeInUp"
+                return "flipInY"
             } else if (r == 2) {
-                return "fadeInRight"
+                return "flipInY"
             } else if (r == 3) {
-                return "fadeInLeft"
+                return "flip"
             }
         }
 
