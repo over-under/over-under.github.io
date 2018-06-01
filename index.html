@@ -12,7 +12,7 @@
     <script>
 
         const KEY = "UNDER_OVER"
-        const KEY_HISTORY = "UNDER_OVER_HISTORY"
+        const KEY_HISTORY = "HISTORY"
         const MAX_HISTORY = 100
         let total = 0
         let formId = "formId"
@@ -68,30 +68,57 @@
             if (s) {
                 arr = JSON.parse(s)
                 if (arr.length > MAX_HISTORY) {
-                    arr.shift()
+                    arr.splice(-1,1)
                 }
             }
             const item = {
                 change: amount,
-                timestamp: new Date()
+                timestamp: new Date().getTime()
             }
-            arr.push(item)
+            arr.unshift(item)
             s = JSON.stringify(arr)
             localStorage.setItem(KEY_HISTORY, s)
+            createHistoryItem(getHistoryDiv(), item)
 
         }
 
-        function showHistory() {
+        function pullHistory() {
             let arr = []
             let s = localStorage.getItem(KEY_HISTORY)
             if (s) {
                 arr = JSON.parse(s)
-                const historyDiv = document.getElementById("history");
+                const historyDiv = getHistoryDiv()
+                historyDiv.innerHTML = ''
                 arr.forEach(item => {
-                    const r = document.createElement("p")
-                    r.innerText = item.change + "h @ " + item.timestamp
-                    historyDiv.appendChild(r)
+                    createHistoryItem(historyDiv, item)
                 })
+            }
+        }
+
+        function getHistoryDiv() {
+            return document.getElementById("history");
+        }
+
+        function createHistoryItem(historyDiv, item) {
+            let d = new Date()
+            d.setTime(item.timestamp)
+
+            const r = document.createElement("div")
+            r.classList.add("alert", "alert-success", "animated", randomBounceIn())
+            
+            r.innerText = item.change + "h @ " + d
+            historyDiv.insertBefore(r, historyDiv.childNodes[0])
+
+        }
+
+        function randomBounceIn() {
+            const r = Math.floor((Math.random() * 3) + 1)
+            if (r == 1) {
+                return "bounceInUp"
+            } else if (r == 2) {
+                return "bounceInRight"
+            } else if (r == 3) {
+                return "bounceInLeft"
             }
         }
 
@@ -160,13 +187,14 @@
             <br>
             <br>
             <div class="row">
-                <a href="javascript:showHistory()" class="btn btn-sm btn-success">Show history</a>
+                <a href="javascript:pullHistory()" class="btn btn-sm btn-success">Pull history</a>
             </div>
 
-            <div class="row">
+
+            <div style="margin-top: 10px" class="row">
                 <div id="history" name="history"></div>
             </div>
-            
+
         </div>
     </body>
 
