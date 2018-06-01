@@ -86,11 +86,8 @@
             let s = localStorage.getItem(KEY_HISTORY)
             if (s) {
                 arr = JSON.parse(s)
-                console.log(arr)
                 const historyDiv = document.getElementById("history");
                 arr.forEach(item => {
-                    console.log("rows!")
-
                     const r = document.createElement("p")
                     r.innerText = item.change + "h @ " + item.timestamp
                     historyDiv.appendChild(r)
