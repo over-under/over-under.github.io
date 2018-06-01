@@ -12,6 +12,8 @@
     <script>
 
         const KEY = "UNDER_OVER"
+        const KEY_HISTORY = "UNDER_OVER_HISTORY"
+        const MAX_HISTORY = 100
         let total = 0
         let formId = "formId"
         let animation = "jello"
@@ -36,12 +38,12 @@
             document.getElementById("total").innerHTML = total
         }
 
-
         function click(amt) {
             total += amt
             save()
             render()
             animate()
+            appendHistory(amt)
 
         }
 
@@ -59,6 +61,26 @@
         function save() {
             localStorage.setItem(this.KEY, String(total))
         }
+
+        function appendHistory(amount) {
+            let arr = []
+            let s = localStorage.getItem(this.KEY_HISTORY)
+            if (!isNaN(s) && (s)) {
+                arr = JSON.parse(s)
+                if (arr.length > this.MAX_HISTORY) {
+                    arr.shift()
+                }
+            }
+            const item = {
+                change: amount,
+                timestamp: new Date()
+            }
+            arr.push(item)
+            s = JSON.parse(arr)
+            localStorage.setItem(this.KEY_HISTORY, s)
+
+        }
+
 
         onload = load
 
