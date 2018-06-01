@@ -19,7 +19,7 @@
         let animation = "jello"
 
         function load() {
-            let totalString = localStorage.getItem(this.KEY)
+            let totalString = localStorage.getItem(KEY)
             if (!isNaN(totalString) && (totalString)) {
                 total = +totalString
             } else {
@@ -59,15 +59,15 @@
         }
 
         function save() {
-            localStorage.setItem(this.KEY, String(total))
+            localStorage.setItem(KEY, String(total))
         }
 
         function appendHistory(amount) {
             let arr = []
-            let s = localStorage.getItem(this.KEY_HISTORY)
-            if (!isNaN(s) && (s)) {
+            let s = localStorage.getItem(KEY_HISTORY)
+            if (s) {
                 arr = JSON.parse(s)
-                if (arr.length > this.MAX_HISTORY) {
+                if (arr.length > MAX_HISTORY) {
                     arr.shift()
                 }
             }
@@ -76,9 +76,26 @@
                 timestamp: new Date()
             }
             arr.push(item)
-            s = JSON.parse(arr)
-            localStorage.setItem(this.KEY_HISTORY, s)
+            s = JSON.stringify(arr)
+            localStorage.setItem(KEY_HISTORY, s)
 
+        }
+
+        function showHistory() {
+            let arr = []
+            let s = localStorage.getItem(KEY_HISTORY)
+            if (s) {
+                arr = JSON.parse(s)
+                console.log(arr)
+                const historyDiv = document.getElementById("history");
+                arr.forEach(item => {
+                    console.log("rows!")
+
+                    const r = document.createElement("p")
+                    r.innerText = item.change + "h @ " + item.timestamp
+                    historyDiv.appendChild(r)
+                })
+            }
         }
 
 
@@ -142,6 +159,17 @@
 
             </div>
 
+
+            <br>
+            <br>
+            <div class="row">
+                <a href="javascript:showHistory()" class="btn btn-sm btn-success">Show history</a>
+            </div>
+
+            <div class="row">
+                <div id="history" name="history"></div>
+            </div>
+            
         </div>
     </body>
 
